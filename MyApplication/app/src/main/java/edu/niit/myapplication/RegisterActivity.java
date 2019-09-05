@@ -1,6 +1,8 @@
 package edu.niit.myapplication;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import edu.niit.myapplication.utils.MD5Utils;
 
 import android.content.Intent;
@@ -22,12 +24,14 @@ public class RegisterActivity extends AppCompatActivity {
     //  3.4 跳转到登录界面
     private EditText etUsername, etPassword,etPwdAgain;
     private Button btnRegister;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         //  1.获取界面上的控件
         initView();
+        initToolbar();
         //  2.
         btnRegister.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -53,11 +57,29 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void initToolbar(){
+        toolbar = findViewById(R.id.title_toolbar);
+        toolbar.setTitle("注册");
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);//设置返回键
+//            actionBar.setHomeButtonEnabled(true);//设置是否是首页
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RegisterActivity.this.finish();
+            }
+        });
+    }
+
     private void savePref(String username , String password) {
         SharedPreferences sp =getSharedPreferences("userInfo",MODE_PRIVATE);
         SharedPreferences.Editor editor =sp.edit();
         editor.putString("username",username);
-        editor.putString("username",password);
+        editor.putString("password",password);
         editor.apply();
     }
 
