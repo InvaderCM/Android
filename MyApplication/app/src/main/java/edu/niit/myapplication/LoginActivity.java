@@ -1,5 +1,6 @@
 package edu.niit.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -43,17 +44,28 @@ public class LoginActivity extends AppCompatActivity {
 //                } else if (!username.equals(name)) {
 //                    Toast.makeText(LoginActivity.this, "用户名错误"+username+","+name , Toast.LENGTH_SHORT).show();
                 } else if (!MD5Utils.md5(password).equals(pwd)) {
-                    Toast.makeText(LoginActivity.this, "密码错误"+pwd, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                    saveLoginStatus(username,true);
                     // 给bnt1添加点击响应事件
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    //启动
+                    intent.putExtra("isLogin" , true);
                     startActivity(intent);
+                    LoginActivity.this.finish();
                 }
             }
         });
     }
+
+    private void saveLoginStatus(String username , boolean isLogin){
+        getSharedPreferences("userInfo" , MODE_PRIVATE)
+                .edit()
+                .putString("loginUser",username)
+                .putBoolean("isLogin" , isLogin)
+                .apply();
+    }
+
 
     private void initToolbar(){
         toolbar = findViewById(R.id.title_toolbar);
@@ -72,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     private void initView(){
         etUsername = findViewById(R.id.name);
         etPassword = findViewById(R.id.password);
@@ -80,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         tvLogin.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent =new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
         Button tvRegister = findViewById(R.id.register_login);
@@ -93,13 +106,21 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    protected void onActivityResult(int requestCode , int resultCode , @Nullable Intent data){
+        super.onActivityResult(requestCode , resultCode , data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
+            String username = data .getStringExtra("username");
+            etUsername.setText(username);
+        }
+    }
+
     private void initData(){
-        String username = readPref();
+        String username = readPwd();
         if (!TextUtils.isEmpty(username)){
             etUsername.setText(username);
         }
     }
-    private String readPref(){
+    private String readPwd(){
         SharedPreferences sp = getSharedPreferences("userInfo" , MODE_PRIVATE);
         return sp.getString("username" , "");
     }

@@ -30,6 +30,7 @@
         android:layout_marginTop="30dp"
         android:background="#ffffffff"
         android:hint="请输入用户名"
+        android:drawableStart="@drawable/username"
         android:paddingLeft="20dp"
         android:textColor="#ff000000"
         android:textSize="18sp" />
@@ -46,6 +47,7 @@
         android:background="#ffffffff"
         android:inputType="textPassword"
         android:hint="请输入密码"
+        android:drawableStart="@drawable/password"
         android:paddingLeft="20dp"
         android:textColor="#ff000000"
         android:textSize="20sp" />
