@@ -1,6 +1,9 @@
 package edu.niit.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.SparseArray;
@@ -16,6 +19,19 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup group;
     //定义标题的集合
     private SparseArray<String> titles;
+    private SparseArray<Fragment> fragments ;
+    private void initFragment(){
+        //1.创建fragment的列表
+        fragments.put(R.id.btn_my , MySettingFragment.newInstance());
+        //2.加载默认的Fragment
+        replaceFragment(fragments.get(R.id.btn_my));
+    }
+    private void replaceFragment(Fragment fragment){
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.replace(R.id.main_body , fragment);
+        ft.commit();
+    }
     private void initTitles(){
         titles = new SparseArray<>();
         titles.put(R.id.btn_course , "课程");
