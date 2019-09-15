@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private SparseArray<Fragment> fragments ;
     private void initFragment(){
         //1.创建fragment的列表
+        fragments = new SparseArray<>();
         fragments.put(R.id.btn_my , MySettingFragment.newInstance());
         //2.加载默认的Fragment
         replaceFragment(fragments.get(R.id.btn_my));
@@ -66,5 +67,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initTitles();
+        initFragment();
     }
 }

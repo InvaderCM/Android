@@ -48,10 +48,12 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     saveLoginStatus(username,true);
-                    // 给bnt1添加点击响应事件
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                    //返回我的界面
+                    Intent intent = new Intent();
                     intent.putExtra("isLogin" , true);
-                    startActivity(intent);
+                    intent.putExtra("longinUser",username);
+                    setResult(RESULT_OK,intent);
                     LoginActivity.this.finish();
                 }
             }
