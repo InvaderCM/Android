@@ -1,25 +1,26 @@
-package edu.niit.myapplication;
+package edu.niit.myapplication.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import edu.niit.myapplication.R;
 
 import android.os.Bundle;
 import android.view.View;
 
-public class ProtectPasswordActivity extends AppCompatActivity {
-
+public class ForgetPasswordActivity extends AppCompatActivity {
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_protect_password);
+        setContentView(R.layout.activity_forget_password);
         initToolbar();
     }
 
     private void initToolbar() {
         toolbar = findViewById(R.id.title_toolbar);
-        toolbar.setTitle("设置密保");
+        toolbar.setTitle("修改密码");
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -30,7 +31,7 @@ public class ProtectPasswordActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProtectPasswordActivity.this.finish();
+                ForgetPasswordActivity.this.finish();
             }
         });
     }

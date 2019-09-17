@@ -1,19 +1,22 @@
-package edu.niit.myapplication;
+package edu.niit.myapplication.fragment;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import edu.niit.myapplication.R;
+import edu.niit.myapplication.activity.LoginActivity;
+import edu.niit.myapplication.activity.SettingActivity;
+import edu.niit.myapplication.activity.UserActivity;
+import edu.niit.myapplication.entity.User;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MySettingFragment extends Fragment {
@@ -73,9 +76,10 @@ public class MySettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isLogin){
-                    Intent intent = new Intent(mContext , SettingActivity.class);
+                    Intent intent = new Intent(mContext , UserActivity.class);
+                    startActivity(intent);
                 }else {
-                    Intent intent =new Intent(mContext,LoginActivity.class);
+                    Intent intent =new Intent(mContext, LoginActivity.class);
                     startActivityForResult(intent,1);
                 }
             }

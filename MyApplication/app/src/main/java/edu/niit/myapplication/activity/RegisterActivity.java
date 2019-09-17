@@ -1,8 +1,9 @@
-package edu.niit.myapplication;
+package edu.niit.myapplication.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import edu.niit.myapplication.R;
 import edu.niit.myapplication.utils.MD5Utils;
 
 import android.content.Intent;
@@ -12,7 +13,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {

@@ -1,9 +1,10 @@
-package edu.niit.myapplication;
+package edu.niit.myapplication.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import edu.niit.myapplication.R;
 import edu.niit.myapplication.utils.MD5Utils;
 
 import android.content.Intent;
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView tvLogin=findViewById(R.id.login_button);
         tvLogin.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Intent intent =new Intent(LoginActivity.this,MainActivity.class);
+                Intent intent =new Intent(LoginActivity.this, MainActivity.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -102,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent =new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });

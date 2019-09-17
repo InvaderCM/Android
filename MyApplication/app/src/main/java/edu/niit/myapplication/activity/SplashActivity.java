@@ -1,6 +1,7 @@
-package edu.niit.myapplication;
+package edu.niit.myapplication.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.niit.myapplication.R;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;

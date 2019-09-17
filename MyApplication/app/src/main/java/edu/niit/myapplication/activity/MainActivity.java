@@ -1,9 +1,11 @@
-package edu.niit.myapplication;
+package edu.niit.myapplication.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import edu.niit.myapplication.fragment.MySettingFragment;
+import edu.niit.myapplication.R;
 
 import android.os.Bundle;
 import android.util.SparseArray;
@@ -11,8 +13,6 @@ import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
-
-import java.security.acl.Group;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
