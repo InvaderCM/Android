@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/item_save"
+    android:icon="@drawable/save"
+    android:title="确定"
+    app:showAsAction="always"/>
+    <item
+        android:id="@+id/item_cancel"
+        android:icon="@drawable/cancel"
+        android:title="取消"
+        app:showAsAction="never"/>
+    <item android:title="测试">
+        <menu>
+            <item android:title="子菜单项1"/>
+            <item android:title="子菜单项2"/>
+        </menu>
+    </item>
+</menu>

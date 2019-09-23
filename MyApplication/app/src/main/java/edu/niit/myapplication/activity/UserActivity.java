@@ -7,12 +7,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -144,9 +146,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         Bundle bundle = new Bundle();
         bundle.putString("title","设置签名");//标题栏的标题
         bundle.putString("value",signature);//内容
-        bundle.putInt("flag",1);//用于区分修改昵称还是标题
+        bundle.putInt("flag",2);//用于区分修改昵称还是标题
         intent.putExtras(bundle);
-        startActivityForResult(intent , 1);
+        startActivityForResult(intent , 2);
     }
     private void modifySex() {
         final String[] datas = {"男" , "女"};
@@ -171,4 +173,27 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         }).show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //1.对空数据、返回异常做判断
+        if (data==null || resultCode != RESULT_OK){
+            Toast.makeText(this,"未知错误",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //2.根据requestCode进行对应的保存
+        //2.1获取data数据
+        if (requestCode == 1){
+            //2.2设置user对应的属性值，更新界面对应的控件内容
+            String value=data.getStringExtra("nickname");
+            tvNickname.setText(value);
+            user.setNickname(value);
+        } else if (requestCode == 2){
+            String value=data.getStringExtra("signature");
+            tvSignature.setText(value);
+            user.setSignature(value);
+        }
+        //2.3保存到数据库
+        service.modify(user);
+    }
 }
