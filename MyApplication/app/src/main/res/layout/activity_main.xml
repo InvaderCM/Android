@@ -33,6 +33,7 @@
             android:id="@+id/btn_execise"
             style="@style/TabMenuItem"
             android:drawableTop="@drawable/selector_nav_execise"
+            android:checked="true"
             android:text="习题" />
 
         <RadioButton
@@ -45,7 +46,7 @@
             android:id="@+id/btn_my"
             style="@style/TabMenuItem"
             android:drawableTop="@drawable/selector_nav_my"
-            android:checked="true"
+
             android:text="我" />
     </RadioGroup>
 
