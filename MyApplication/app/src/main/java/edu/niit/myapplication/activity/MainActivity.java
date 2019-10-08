@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import edu.niit.myapplication.R;
+import edu.niit.myapplication.fragment.CourseFragmet;
 import edu.niit.myapplication.fragment.MySettingFragment;
 import edu.niit.myapplication.fragment.PractiseFragment;
 import edu.niit.myapplication.fragment.RecyclerViewFragment;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment(){
         fragment=new SparseArray<>();
         fragment.put(R.id.btn_my, MySettingFragment.newInstance());
-        fragment.put(R.id.btn_execise, PractiseFragment.newInstance("Activity向Fragment传值"));
+        fragment.put(R.id.btn_execise, RecyclerViewFragment.newInstance("Activity向Fragment传值",""));
+        fragment.put(R.id.btn_course,CourseFragmet.newInstance());
 //        fragment.put(R.id.btn_execise, RecyclerViewFragment.newInstance("Activity向Fragment传值", "param2"));
 
         replaceFragment(fragment.get(R.id.btn_execise));

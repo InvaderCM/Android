@@ -1,6 +1,7 @@
 package edu.niit.myapplication.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import edu.niit.myapplication.R;
+import edu.niit.myapplication.activity.ExerciseDetailActivity;
 import edu.niit.myapplication.adapter.Exercise;
 import edu.niit.myapplication.adapter.RecyclerViewAdapter;
 
@@ -73,25 +75,41 @@ public class RecyclerViewFragment extends Fragment {
         }
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //1.初始化数据
+        // 1. 初始化数据
         initData();
-        //2.获取控件
-        View view = inflater.inflate(R.layout.fragment_recycler_view,container,false);
+        // 2. 获取控件
+        View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycle_view);
-        //3.设置布局和分割线
+        // 3. 设置布局和分割线
         LinearLayoutManager manager = new LinearLayoutManager(container.getContext());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerView.addItemDecoration(new DividerItemDecoration(container.getContext(),
                 DividerItemDecoration.VERTICAL));
-        //4.创建适配器
-        RecyclerViewAdapter adapter =new RecyclerViewAdapter(exercises);
-        //5.设置适配器
+        // 4. 创建适配器
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(exercises);
+        // 5. 设置适配器
         recyclerView.setAdapter(adapter);
 
+        // 6. 设置监听器
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Exercise exercise = exercises.get(position);
+                //跳转到相应的章节习题
+                Intent intent = new Intent(getContext(), ExerciseDetailActivity.class);
+                intent.putExtra("id", exercise.getId());//用于识别是哪个xml文件
+                intent.putExtra("title", exercise.getTitle());//用于设置详情的标题栏
+                getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
         return view;
     }
 
