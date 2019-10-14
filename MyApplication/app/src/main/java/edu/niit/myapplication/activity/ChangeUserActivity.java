@@ -1,4 +1,5 @@
 package edu.niit.myapplication.activity;
+import android.content.Context;
 import android.content.Intent;;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,10 +10,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import edu.niit.myapplication.R;
+import edu.niit.myapplication.entity.User;
 
 
 public class ChangeUserActivity extends AppCompatActivity {
@@ -75,7 +88,6 @@ public class ChangeUserActivity extends AppCompatActivity {
             title=bundle.getString("title");
             value=bundle.getString("value");
             flag=bundle.getInt("flag");
-
         }
     }
     private void initView(){
@@ -118,4 +130,5 @@ public class ChangeUserActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

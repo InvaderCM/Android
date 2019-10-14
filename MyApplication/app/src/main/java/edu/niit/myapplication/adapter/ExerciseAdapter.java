@@ -69,6 +69,7 @@ public class ExerciseAdapter extends BaseAdapter {
         }
         return convertView;
     }
+
     //存放item_exeercise布局中所有的控件
     static class ViewHolder{
         TextView tvtvOder,tvTitle,tvSubTitle;

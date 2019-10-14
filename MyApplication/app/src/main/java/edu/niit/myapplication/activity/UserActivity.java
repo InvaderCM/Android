@@ -1,8 +1,13 @@
 package edu.niit.myapplication.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -10,6 +15,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.alibaba.fastjson.JSON;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +35,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import edu.niit.myapplication.R;
 import edu.niit.myapplication.entity.User;
 import edu.niit.myapplication.service.impl.UserService;
@@ -77,6 +95,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         spUsername = SharedUtils.readValue(this,"loginUser");
         service = new UserServiceImpl(this);
         user = service.get(spUsername);
+        user=readFromInternal();
+        user=readPrivateExStorage();
+        user=readPublicExternalSorage();
         if (user == null){
             user = new User();
             user.setUsername(spUsername);
@@ -84,6 +105,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             user.setSignature("课程助手");
             user.setSex("女");
             service.save(user);
+            saveToInternal(user);
+            savePrivateExStorage(user);
+            savePublicExternalStorage(user);
         }
     }
 
@@ -196,4 +220,139 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         //2.3保存到数据库
         service.modify(user);
     }
+
+    private static final String FILE_NAME="userinfo.txt";
+    private User readFromInternal(){
+        User user =null;
+        try{
+            FileInputStream in=this.openFileInput(FILE_NAME);
+            BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+            String data =reader.readLine();
+            user= JSON.parseObject(data,User.class);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    private void saveToInternal(User user){
+        try{
+            FileOutputStream out=this.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(JSON.toJSONString(user));
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void savePrivateExStorage(User user){
+        try{
+            File file=new File(getExternalFilesDir(""),FILE_NAME);
+            FileOutputStream out=new FileOutputStream(file);
+            BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(JSON.toJSONString(user));
+            writer.flush();
+            writer.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private User readPrivateExStorage(){
+        User user =null;
+        try{
+            File file=new File(getExternalFilesDir(""),FILE_NAME);
+            if (!file.exists()){
+                return null;
+            }
+            FileInputStream in=new FileInputStream(file);
+            BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+            String data =reader.readLine();
+            user= JSON.parseObject(data,User.class);
+            reader.close();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    private static final int REQUEST_READ_USERINFO=101;
+    private static final int REQUEST_WRITE_USERINFO=102;
+    private void savePublicExternalStorage(User user){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_WRITE_USERINFO);
+                return;
+            }
+        }
+      saveUserInfo();
+    }
+
+    private User readPublicExternalSorage(){
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+            !=PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_READ_USERINFO);
+                return null;
+            }
+        }
+        return readUserInfo();
+    }
+    private void onRequestPermisionsResult(int requestCode,
+                                           String[] permisions,
+                                           int[] gratResults){
+        super.onRequestPermissionsResult(requestCode,permisions,gratResults);
+        if (gratResults.length==0 ||
+                gratResults[0] !=PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this,"申请权限被拒绝，无法执行操作",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (requestCode ==REQUEST_READ_USERINFO){
+            user =readUserInfo();
+        }else if (requestCode ==REQUEST_WRITE_USERINFO){
+            saveUserInfo();
+        }
+    }
+    private void saveUserInfo(){
+        try{
+            File file=new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS),FILE_NAME);
+            FileOutputStream out=new FileOutputStream(file);
+            BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(JSON.toJSONString(user));
+            writer.flush();
+            writer.close();
+            out.close();
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private User readUserInfo(){
+        User user=null;
+        File file=new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS),FILE_NAME);
+        try{
+            FileInputStream in=new FileInputStream(file);
+            int length=in.available();
+            byte[] data=new byte[length];
+            int len=in.read(data);
+            user =JSON.parseObject(data,User.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this,"读取失败",Toast.LENGTH_SHORT).show();
+        }
+        return user;
+    }
+
 }
